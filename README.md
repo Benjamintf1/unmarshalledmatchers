@@ -15,15 +15,15 @@ import (
 
 //Match with exception keys
 Expect(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(
-MatchUnorderedJSON(`{"a":[1,2,3],"b":[3,2,1],"c":[3,2,1]}`, WithOrderedListKeys("a"))) 
+	MatchUnorderedJSON(`{"a":[1,2,3],"b":[3,2,1],"c":[3,2,1]}`, WithOrderedListKeys("a"))) 
 Expect(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(
-MatchOrderedJSON(`{"a":[3,2,1],"b":[1,2,3],"c":[1,2,3]}`, WithUnorderedListKeys("a")))
+	MatchOrderedJSON(`{"a":[3,2,1],"b":[1,2,3],"c":[1,2,3]}`, WithUnorderedListKeys("a")))
 
 //Contain with exception keys
 Expect(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(
-ContainUnorderedJSON(`{"a":[1,2,3],"b":[3,2,1]}`, WithOrderedListKeys("a")))
+	ContainUnorderedJSON(`{"a":[1,2,3],"b":[3,2,1]}`, WithOrderedListKeys("a")))
 Expect(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(
-ContainOrderedJSON(`{"a":[3,2,1],"b":[1,2,3]}`, WithUnorderedListKeys("a")))
+	ContainOrderedJSON(`{"a":[3,2,1],"b":[1,2,3]}`, WithUnorderedListKeys("a")))
 
 
 ```
