@@ -2,7 +2,13 @@ Gomega matchers for more complicated json matching
 ==================================
 
 This package provides [Gomega](https://github.com/onsi/gomega) matchers to match against either subsets of json/xml/yml, as well 
-as json/xml/yml that has unordered lists. You can see an example of what that means below
+as json/xml/yml that has unordered lists. You can see an example of what that means below.
+
+The functions of this library should follow the following pattern
+
+```
+(Match|Contain)(Unordered|Unordered)(JSON|XML|YAML)( aStructureToUnmarshall, optional (With(Un)orderedKeys(keys))
+```
 
 JsonMatchers()
 -------------------
