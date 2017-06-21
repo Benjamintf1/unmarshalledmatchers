@@ -19,7 +19,7 @@ import (
 	. "github.com/Benjamintf1/ExpandedUnmarshalledMatchers"
 )
 
-//Match with list ordering exception json keys
+//Match with list ordering and optional exception list ordering exception keys
 Expect(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(
 	MatchUnorderedJSON(`{"a":[1,2,3],"b":[3,2,1],"c":[3,2,1]}`,
 		WithOrderedListKeys("a"))) 
@@ -28,7 +28,7 @@ Expect(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(
 	MatchOrderedJSON(`{"a":[3,2,1],"b":[1,2,3],"c":[1,2,3]}`,
 		WithUnorderedListKeys("a")))
 
-//Contain with list ordering exception json keys
+//Contain with list ordering and optional exception list ordering exception keys
 Expect(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(
 	ContainUnorderedJSON(`{"a":[1,2,3],"b":[3,2,1]}`,
 		WithOrderedListKeys("a")))
