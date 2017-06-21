@@ -98,6 +98,100 @@ func ContainOrderedJSON(json interface{}, keys ...KeyExclusions) types.GomegaMat
 	}
 }
 
+
+func MatchUnorderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
+	deepMatcher := UnmarshalledDeepMatcher{
+		Ordered: false,
+		Subset:  false,
+	}
+
+	if len(keys) > 0{
+		if len(keys) > 1 {
+			fmt.Errorf("Only 1 key exclusion set is currently supported")
+		} else if keys[0].IsOrdered(){
+			deepMatcher.InvertOrderingKeys = keys[0].GetMap()
+		} else {
+			fmt.Errorf("You are trying to set unordered list keys for unordered YAML")
+		}
+	}
+
+
+	return &ExpandedYAMLMatcher{
+		YAMLToMatch: json,
+		DeepMatcher: deepMatcher,
+	}
+}
+
+func MatchOrderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
+	deepMatcher := UnmarshalledDeepMatcher{
+		Ordered: true,
+		Subset:  false,
+	}
+
+	if len(keys) > 0{
+		if len(keys) > 1 {
+			fmt.Errorf("Only 1 key exclusion set is currently supported")
+		} else if keys[0].IsOrdered(){
+			fmt.Errorf("You are trying to set ordered list keys for ordered YAML")
+		} else {
+			deepMatcher.InvertOrderingKeys = keys[0].GetMap()
+		}
+	}
+
+
+	return &ExpandedYAMLMatcher{
+		YAMLToMatch: json,
+		DeepMatcher: deepMatcher,
+	}
+}
+
+func ContainUnorderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
+	deepMatcher := UnmarshalledDeepMatcher{
+		Ordered: false,
+		Subset:  true,
+	}
+
+	if len(keys) > 0{
+		if len(keys) > 1 {
+			fmt.Errorf("Only 1 key exclusion set is currently supported")
+		} else if keys[0].IsOrdered(){
+			deepMatcher.InvertOrderingKeys = keys[0].GetMap()
+		} else {
+			fmt.Errorf("You are trying to set unordered list keys for unordered YAML")
+		}
+	}
+
+
+	return &ExpandedYAMLMatcher{
+		YAMLToMatch: json,
+		DeepMatcher: deepMatcher,
+	}
+}
+
+func ContainOrderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
+	deepMatcher := UnmarshalledDeepMatcher{
+		Ordered: true,
+		Subset:  true,
+	}
+
+	if len(keys) > 0{
+		if len(keys) > 1 {
+			fmt.Errorf("Only 1 key exclusion set is currently supported")
+		} else if keys[0].IsOrdered(){
+			fmt.Errorf("You are trying to set ordered list keys for ordered YAML")
+		} else {
+			deepMatcher.InvertOrderingKeys = keys[0].GetMap()
+		}
+	}
+
+
+	return &ExpandedYAMLMatcher{
+		YAMLToMatch: json,
+		DeepMatcher: deepMatcher,
+	}
+}
+
+
 type OrderedKeys struct {
 	val map[string]bool
 }

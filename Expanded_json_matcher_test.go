@@ -61,11 +61,16 @@ var _ = Describe("MatchUnorderedJSONMatcher", func() {
 		It("should succeed if the JSON is contained", func() {
 			Ω(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(ContainOrderedJSON(`{"b":[1,2,3]}`))
 			Ω(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(ContainUnorderedJSON(`{"b":[3,2,1]}`))
+
+			Ω(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(ContainUnorderedJSON(`{"a":[1,2,3],"b":[3,2,1]}`, WithOrderedListKeys("a")))
+			Ω(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(ContainOrderedJSON(`{"a":[3,2,1],"b":[1,2,3]}`, WithUnorderedListKeys("a")))
+
 		})
 
 		It("should Not succeed if the JSON isnt contained", func() {
 			Ω(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).ShouldNot(ContainOrderedJSON(`{"b":[3,2,1]}`))
 			Ω(`{"b":[3,2,1]}`).ShouldNot(ContainOrderedJSON(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`))
+			Ω(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).ShouldNot(ContainUnorderedJSON(`{"a":[3,2,1],"b":[3,2,1]}`, WithOrderedListKeys("a")))
 		})
 	})
 
