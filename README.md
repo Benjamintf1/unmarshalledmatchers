@@ -7,7 +7,7 @@ as json/yaml that has unordered lists. You can see an example of what that means
 The functions of this library should follow the following pattern
 
 ```
-(Match|Contain)(Unordered|Unordered)(JSON|YAML)( aStructureToUnmarshall, optional (With(Un)orderedListKeys(keys))
+(Match|Contain)(Ordered|Unordered)(JSON|YAML)( aStructureToUnmarshall, optional (With(Un)orderedListKeys(keys))
 ```
 
 JsonMatchers()
