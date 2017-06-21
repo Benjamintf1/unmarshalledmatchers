@@ -5,7 +5,9 @@ import (
 	"fmt"
 )
 
-
+//This is for json with Unordered lists ie [1,2,3] is equal to [2,3,1].
+//If you want to have some lists enforce order, add keys exclusions using
+//Add WithOrderedListKeys( json keys that refer to unordered lists )
 func MatchUnorderedJSON(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
 	deepMatcher := UnmarshalledDeepMatcher{
 		Ordered: false,
@@ -29,6 +31,10 @@ func MatchUnorderedJSON(json interface{}, keys ...KeyExclusions) types.GomegaMat
 	}
 }
 
+//This is for json with Ordered lists ie [1,2,3] is not equal to [2,3,1].
+//This is just like the default match json.
+//If you want to have some lists enforce order, add keys exclusions using
+//Add WithUnorderedListKeys( json keys that refer to unordered lists )
 func MatchOrderedJSON(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
 	deepMatcher := UnmarshalledDeepMatcher{
 		Ordered: true,
@@ -52,6 +58,10 @@ func MatchOrderedJSON(json interface{}, keys ...KeyExclusions) types.GomegaMatch
 	}
 }
 
+//This is for json with Unordered lists ie [1,2,3] is equal to [2,3,1].
+//This also is a subset match rather then a full match ie [1,2,3] contains [1,2]
+//If you want to have some lists enforce order, add keys exclusions using
+//Add WithOrderedListKeys( json keys that refer to unordered lists )
 func ContainUnorderedJSON(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
 	deepMatcher := UnmarshalledDeepMatcher{
 		Ordered: false,
@@ -75,6 +85,11 @@ func ContainUnorderedJSON(json interface{}, keys ...KeyExclusions) types.GomegaM
 	}
 }
 
+//This is for json with Ordered lists ie [1,2,3] is not equal to [2,3,1].
+//This is just like the default match json.
+//This also is a subset match rather then a full match ie [1,2,3] contains [1,2]
+//If you want to have some lists enforce order, add keys exclusions using
+//Add WithUnorderedListKeys( json keys that refer to unordered lists )
 func ContainOrderedJSON(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
 	deepMatcher := UnmarshalledDeepMatcher{
 		Ordered: true,
@@ -98,8 +113,10 @@ func ContainOrderedJSON(json interface{}, keys ...KeyExclusions) types.GomegaMat
 	}
 }
 
-
-func MatchUnorderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
+//This is for yaml with Unordered lists ie [1,2,3] is equal to [2,3,1].
+//If you want to have some lists enforce order, add keys exclusions using
+//Add WithOrderedListKeys( YAML keys that refer to unordered lists )
+func MatchUnorderedYAML(YAML interface{}, keys ...KeyExclusions) types.GomegaMatcher {
 	deepMatcher := UnmarshalledDeepMatcher{
 		Ordered: false,
 		Subset:  false,
@@ -117,12 +134,16 @@ func MatchUnorderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaMat
 
 
 	return &ExpandedYAMLMatcher{
-		YAMLToMatch: json,
+		YAMLToMatch: YAML,
 		DeepMatcher: deepMatcher,
 	}
 }
 
-func MatchOrderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
+//This is for yaml with Ordered lists ie [1,2,3] is not equal to [2,3,1].
+//This is just like the default match yaml.
+//If you want to have some lists enforce order, add keys exclusions using
+//Add WithUnorderedListKeys( YAML keys that refer to unordered lists )
+func MatchOrderedYAML(YAML interface{}, keys ...KeyExclusions) types.GomegaMatcher {
 	deepMatcher := UnmarshalledDeepMatcher{
 		Ordered: true,
 		Subset:  false,
@@ -140,12 +161,16 @@ func MatchOrderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaMatch
 
 
 	return &ExpandedYAMLMatcher{
-		YAMLToMatch: json,
+		YAMLToMatch: YAML,
 		DeepMatcher: deepMatcher,
 	}
 }
 
-func ContainUnorderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
+//This is for yaml with Unordered lists ie [1,2,3] is equal to [2,3,1].
+//This also is a subset match rather then a full match ie [1,2,3] contains [1,2]
+//If you want to have some lists enforce order, add keys exclusions using
+//Add WithOrderedListKeys( YAML keys that refer to unordered lists )
+func ContainUnorderedYAML(YAML interface{}, keys ...KeyExclusions) types.GomegaMatcher {
 	deepMatcher := UnmarshalledDeepMatcher{
 		Ordered: false,
 		Subset:  true,
@@ -163,12 +188,17 @@ func ContainUnorderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaM
 
 
 	return &ExpandedYAMLMatcher{
-		YAMLToMatch: json,
+		YAMLToMatch: YAML,
 		DeepMatcher: deepMatcher,
 	}
 }
 
-func ContainOrderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaMatcher {
+//This is for yaml with Ordered lists ie [1,2,3] is not equal to [2,3,1].
+//This is just like the default match yaml.
+//This also is a subset match rather then a full match ie [1,2,3] contains [1,2]
+//If you want to have some lists enforce order, add keys exclusions using
+//Add WithUnorderedListKeys( YAML keys that refer to unordered lists )
+func ContainOrderedYAML(YAML interface{}, keys ...KeyExclusions) types.GomegaMatcher {
 	deepMatcher := UnmarshalledDeepMatcher{
 		Ordered: true,
 		Subset:  true,
@@ -186,7 +216,7 @@ func ContainOrderedYAML(json interface{}, keys ...KeyExclusions) types.GomegaMat
 
 
 	return &ExpandedYAMLMatcher{
-		YAMLToMatch: json,
+		YAMLToMatch: YAML,
 		DeepMatcher: deepMatcher,
 	}
 }
