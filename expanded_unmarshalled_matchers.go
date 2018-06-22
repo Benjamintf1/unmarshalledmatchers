@@ -223,12 +223,12 @@ func ContainOrderedYAML(YAML interface{}, keys ...KeyExclusions) types.GomegaMat
 
 
 type OrderedKeys struct {
-	val map[string]bool
+	val map[interface{}]bool
 }
 
 func NewOrderedKeys() OrderedKeys {
 	return OrderedKeys{
-		val: make(map[string]bool),
+		val: make(map[interface{}]bool),
 	}
 }
 
@@ -236,17 +236,17 @@ func (k OrderedKeys) IsOrdered() bool {
 	return true;
 }
 
-func (k OrderedKeys) GetMap() map[string]bool {
+func (k OrderedKeys) GetMap() map[interface{}]bool {
 	return k.val;
 }
 
 type UnorderedKeys struct {
-	val map[string]bool
+	val map[interface{}]bool
 }
 
 func NewUnorderedKeys() UnorderedKeys {
 	return UnorderedKeys{
-		val: make(map[string]bool),
+		val: make(map[interface{}]bool),
 	}
 }
 
@@ -254,16 +254,16 @@ func (k UnorderedKeys) IsOrdered() bool {
 	return false;
 }
 
-func (k UnorderedKeys) GetMap() map[string]bool {
+func (k UnorderedKeys) GetMap() map[interface{}]bool {
 	return k.val;
 }
 
 type KeyExclusions interface {
 	IsOrdered() bool
-	GetMap() map[string]bool
+	GetMap() map[interface{}]bool
 }
 
-func WithOrderedListKeys(keys ...string) OrderedKeys{
+func WithOrderedListKeys(keys ...interface{}) OrderedKeys{
 	ok := NewOrderedKeys()
 
 	for _, v := range keys {
@@ -273,7 +273,7 @@ func WithOrderedListKeys(keys ...string) OrderedKeys{
 	return ok
 }
 
-func WithUnorderedListKeys(keys ...string) UnorderedKeys{
+func WithUnorderedListKeys(keys ...interface{}) UnorderedKeys{
 	uk := NewUnorderedKeys()
 
 	for _, v := range keys {

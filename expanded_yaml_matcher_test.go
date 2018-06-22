@@ -12,6 +12,7 @@ var _ = Describe("ExpandedYAMLMatcher", func() {
 			Expect("---").Should(MatchYAML(""))
 			Expect("a: 1").Should(MatchYAML(`{"a":1}`))
 			Expect("a: 1\nb: 2").Should(MatchYAML(`{"b":2, "a":1}`))
+			Expect(`a: [1,2,3]`).Should(MatchUnorderedYAML(`a: [2,1,3]`))
 		})
 
 		It("should explain if the YAML does not match when it should", func() {

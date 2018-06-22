@@ -104,7 +104,7 @@ var _ = Describe("MatchUnorderedJSONMatcher", func() {
 				DeepMatcher: UnmarshalledDeepMatcher{
 					Ordered: false,
 					Subset: false,
-					InvertOrderingKeys: map[string]bool{"1":true},
+					InvertOrderingKeys: map[interface{}]bool{"1":true},
 				},
 			}
 			actual = `{"a": 1, "b.g": {"c": 2, "1": ["hello", "goodbye"]}}`

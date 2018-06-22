@@ -4,7 +4,7 @@ import "reflect"
 
 type UnmarshalledDeepMatcher struct {
 	Ordered            bool
-	InvertOrderingKeys map[string]bool
+	InvertOrderingKeys map[interface{}]bool
 	Subset             bool
 }
 
@@ -27,25 +27,27 @@ func (matcher *UnmarshalledDeepMatcher) deepEqualRecursive(a interface{}, b inte
 			return matcher.deepEqualUnorderedList(a, b, errorPath)
 		}
 	case map[string]interface{}:
-		return matcher.deepEqualMap(a, b, errorPath)
+		return matcher.deepEqualMap(toInterfaceMap(a.(map[string]interface{})), toInterfaceMap(b.(map[string]interface{})), errorPath)
+	case map[interface{}]interface{}:
+		return matcher.deepEqualMap(a.(map[interface{}]interface{}), b.(map[interface{}]interface{}), errorPath)
 	default:
 		return a == b, errorPath
 	}
 }
 
-func (matcher *UnmarshalledDeepMatcher) deepEqualMap(a interface{}, b interface{}, errorPath []interface{}) (bool, []interface{}) {
+func (matcher *UnmarshalledDeepMatcher) deepEqualMap(a map[interface{}]interface{}, b map[interface{}]interface{}, errorPath []interface{}) (bool, []interface{}) {
 	if matcher.Subset {
-		if len(a.(map[string]interface{})) > len(b.(map[string]interface{})) {
+		if len(a) > len(b) {
 			return false, errorPath
 		}
 	} else {
-		if len(a.(map[string]interface{})) != len(b.(map[string]interface{})) {
+		if len(a) != len(b) {
 			return false, errorPath
 		}
 	}
 
-	for k, v1 := range a.(map[string]interface{}) {
-		v2, ok := b.(map[string]interface{})[k]
+	for k, v1 := range a {
+		v2, ok := b[k]
 		if !ok {
 			return false, errorPath
 		}
@@ -110,5 +112,13 @@ func (matcher *UnmarshalledDeepMatcher) deepEqualOrderedList(a interface{}, b in
 		}
 	}
 	return true, errorPath
+}
+
+func toInterfaceMap(map1 map[string]interface{}) (map[interface{}]interface{}){
+	convert := make(map[interface{}]interface{})
+	for key, value := range map1 {
+		convert[key] = value
+	}
+	return convert
 }
 
