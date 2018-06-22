@@ -22,9 +22,9 @@ func (matcher *UnmarshalledDeepMatcher) deepEqualRecursive(a interface{}, b inte
 	switch a.(type) {
 	case []interface{}:
 		if (matcher.Ordered && !invertOrdering) || (!matcher.Ordered && invertOrdering){
-			return matcher.deepEqualOrderedList(a, b, errorPath)
+			return matcher.deepEqualOrderedList(a.([]interface{}), b.([]interface{}), errorPath)
 		} else {
-			return matcher.deepEqualUnorderedList(a, b, errorPath)
+			return matcher.deepEqualUnorderedList(a.([]interface{}), b.([]interface{}), errorPath)
 		}
 	case map[string]interface{}:
 		return matcher.deepEqualMap(toInterfaceMap(a.(map[string]interface{})), toInterfaceMap(b.(map[string]interface{})), errorPath)
@@ -60,22 +60,22 @@ func (matcher *UnmarshalledDeepMatcher) deepEqualMap(a map[interface{}]interface
 	return true, errorPath
 }
 
-func (matcher *UnmarshalledDeepMatcher) deepEqualUnorderedList(a interface{}, b interface{}, errorPath []interface{}) (bool, []interface{}) {
-	matched := make([]bool, len(b.([]interface{})))
+func (matcher *UnmarshalledDeepMatcher) deepEqualUnorderedList(a []interface{}, b []interface{}, errorPath []interface{}) (bool, []interface{}) {
+	matched := make([]bool, len(b))
 
 	if matcher.Subset {
-		if len(a.([]interface{})) > len(b.([]interface{})) {
+		if len(a) > len(b) {
 			return false, errorPath
 		}
 	} else {
-		if len(a.([]interface{})) != len(b.([]interface{})) {
+		if len(a) != len(b) {
 			return false, errorPath
 		}
 	}
 
-	for _, v1 := range a.([]interface{}) {
+	for _, v1 := range a {
 		foundMatch := false
-		for j, v2 := range b.([]interface{}) {
+		for j, v2 := range b {
 			if matched[j] {
 				continue
 			}
@@ -94,19 +94,19 @@ func (matcher *UnmarshalledDeepMatcher) deepEqualUnorderedList(a interface{}, b 
 	return true, errorPath
 }
 
-func (matcher *UnmarshalledDeepMatcher) deepEqualOrderedList(a interface{}, b interface{}, errorPath []interface{}) (bool, []interface{}) {
+func (matcher *UnmarshalledDeepMatcher) deepEqualOrderedList(a []interface{}, b []interface{}, errorPath []interface{}) (bool, []interface{}) {
 	if matcher.Subset {
-		if len(a.([]interface{})) > len(b.([]interface{})) {
+		if len(a) > len(b) {
 			return false, errorPath
 		}
 	} else {
-		if len(a.([]interface{})) != len(b.([]interface{})) {
+		if len(a) != len(b) {
 			return false, errorPath
 		}
 	}
 
-	for i, v := range a.([]interface{}) {
-		elementEqual, keyPath := matcher.deepEqualRecursive(v, b.([]interface{})[i], false)
+	for i, v := range a {
+		elementEqual, keyPath := matcher.deepEqualRecursive(v, b[i], false)
 		if !elementEqual {
 			return false, append(keyPath, i)
 		}
