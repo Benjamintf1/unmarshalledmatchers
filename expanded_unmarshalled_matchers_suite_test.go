@@ -1,4 +1,4 @@
-package ExpandedUnmarshalledMatchers_test
+package unmarshalledmatchers_test
 
 import (
 	. "github.com/onsi/ginkgo"
@@ -10,9 +10,9 @@ import (
 	"os"
 )
 
-func TestExpandedUnmarshalledMatchers(t *testing.T) {
+func TestUnmarshalledMatchers(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "ExpandedUnmarshalledMatchers Suite")
+	RunSpecs(t, "unmarshalledmatchers Suite")
 }
 
 

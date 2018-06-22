@@ -1,4 +1,4 @@
-package ExpandedUnmarshalledMatchers
+package unmarshalledmatchers
 
 import (
 	"fmt"
