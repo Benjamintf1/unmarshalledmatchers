@@ -8,9 +8,6 @@ type UnmarshalledDeepMatcher struct {
 	Subset             bool
 }
 
-type yamlMap map[interface{}]interface{}
-type jsonMap map[string]interface{}
-
 func (matcher *UnmarshalledDeepMatcher) deepEqual(a interface{}, b interface{}) (bool, []interface{}){
 	return matcher.deepEqualRecursive(a, b, false)
 }
@@ -25,20 +22,20 @@ func (matcher *UnmarshalledDeepMatcher) deepEqualRecursive(a interface{}, b inte
 	switch a.(type) {
 	case []interface{}:
 		if (matcher.Ordered && !invertOrdering) || (!matcher.Ordered && invertOrdering){
-			return matcher.deepEqualOrderedList(a.([]interface{}), b.([]interface{}), errorPath)
+			return matcher.deepEqualOrderedList(a, b, errorPath)
 		} else {
-			return matcher.deepEqualUnorderedList(a.([]interface{}), b.([]interface{}), errorPath)
+			return matcher.deepEqualUnorderedList(a, b, errorPath)
 		}
-	case jsonMap:
-		return matcher.deepEqualMap(toYamlMap(a.(jsonMap)), toYamlMap(b.(jsonMap)), errorPath)
-	case yamlMap:
-		return matcher.deepEqualMap(a.(yamlMap), b.(yamlMap), errorPath)
+	case map[string]interface{}:
+		return matcher.deepEqualMap(toInterfaceMap(a.(map[string]interface{})), toInterfaceMap(b.(map[string]interface{})), errorPath)
+	case map[interface{}]interface{}:
+		return matcher.deepEqualMap(a.(map[interface{}]interface{}), b.(map[interface{}]interface{}), errorPath)
 	default:
 		return a == b, errorPath
 	}
 }
 
-func (matcher *UnmarshalledDeepMatcher) deepEqualMap(a yamlMap, b yamlMap, errorPath []interface{}) (bool, []interface{}) {
+func (matcher *UnmarshalledDeepMatcher) deepEqualMap(a map[interface{}]interface{}, b map[interface{}]interface{}, errorPath []interface{}) (bool, []interface{}) {
 	if matcher.Subset {
 		if len(a) > len(b) {
 			return false, errorPath
@@ -63,22 +60,22 @@ func (matcher *UnmarshalledDeepMatcher) deepEqualMap(a yamlMap, b yamlMap, error
 	return true, errorPath
 }
 
-func (matcher *UnmarshalledDeepMatcher) deepEqualUnorderedList(a []interface{}, b []interface{}, errorPath []interface{}) (bool, []interface{}) {
-	matched := make([]bool, len(b))
+func (matcher *UnmarshalledDeepMatcher) deepEqualUnorderedList(a interface{}, b interface{}, errorPath []interface{}) (bool, []interface{}) {
+	matched := make([]bool, len(b.([]interface{})))
 
 	if matcher.Subset {
-		if len(a) > len(b) {
+		if len(a.([]interface{})) > len(b.([]interface{})) {
 			return false, errorPath
 		}
 	} else {
-		if len(a) != len(b) {
+		if len(a.([]interface{})) != len(b.([]interface{})) {
 			return false, errorPath
 		}
 	}
 
-	for _, v1 := range a {
+	for _, v1 := range a.([]interface{}) {
 		foundMatch := false
-		for j, v2 := range b {
+		for j, v2 := range b.([]interface{}) {
 			if matched[j] {
 				continue
 			}
@@ -97,19 +94,19 @@ func (matcher *UnmarshalledDeepMatcher) deepEqualUnorderedList(a []interface{}, 
 	return true, errorPath
 }
 
-func (matcher *UnmarshalledDeepMatcher) deepEqualOrderedList(a []interface{}, b []interface{}, errorPath []interface{}) (bool, []interface{}) {
+func (matcher *UnmarshalledDeepMatcher) deepEqualOrderedList(a interface{}, b interface{}, errorPath []interface{}) (bool, []interface{}) {
 	if matcher.Subset {
-		if len(a) > len(b) {
+		if len(a.([]interface{})) > len(b.([]interface{})) {
 			return false, errorPath
 		}
 	} else {
-		if len(a) != len(b) {
+		if len(a.([]interface{})) != len(b.([]interface{})) {
 			return false, errorPath
 		}
 	}
 
-	for i, v := range a {
-		elementEqual, keyPath := matcher.deepEqualRecursive(v, b[i], false)
+	for i, v := range a.([]interface{}) {
+		elementEqual, keyPath := matcher.deepEqualRecursive(v, b.([]interface{})[i], false)
 		if !elementEqual {
 			return false, append(keyPath, i)
 		}
@@ -117,8 +114,8 @@ func (matcher *UnmarshalledDeepMatcher) deepEqualOrderedList(a []interface{}, b 
 	return true, errorPath
 }
 
-func toYamlMap(map1 jsonMap) (yamlMap){
-	convert := make(yamlMap)
+func toInterfaceMap(map1 map[string]interface{}) (map[interface{}]interface{}){
+	convert := make(map[interface{}]interface{})
 	for key, value := range map1 {
 		convert[key] = value
 	}
