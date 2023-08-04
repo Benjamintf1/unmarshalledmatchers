@@ -5,13 +5,13 @@ import (
 	"strings"
 
 	"github.com/onsi/gomega/format"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type ExpandedYAMLMatcher struct {
-	YAMLToMatch interface{}
+	YAMLToMatch      interface{}
 	firstFailurePath []interface{}
-	DeepMatcher UnmarshalledDeepMatcher
+	DeepMatcher      UnmarshalledDeepMatcher
 }
 
 func (matcher *ExpandedYAMLMatcher) Match(actual interface{}) (success bool, err error) {
