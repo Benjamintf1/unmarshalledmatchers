@@ -1,9 +1,9 @@
 package unmarshalledmatchers_test
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	. "github.com/benjamintf1/unmarshalledmatchers"
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("MatchUnorderedJSONMatcher", func() {
@@ -45,7 +45,7 @@ var _ = Describe("MatchUnorderedJSONMatcher", func() {
 			Ω(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(MatchUnorderedJSON(`{"a":[1,2,3],"b":[3,2,1],"c":[3,2,1]}`, WithOrderedListKeys("a")))
 		})
 
-		It("should not succeed if a ordered key doesn't match", func (){
+		It("should not succeed if a ordered key doesn't match", func() {
 			Ω(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).ShouldNot(MatchUnorderedJSON(`{"a":[3,2,1],"b":[3,2,1],"c":[3,2,1]}`, WithOrderedListKeys("a")))
 		})
 	})
@@ -55,7 +55,6 @@ var _ = Describe("MatchUnorderedJSONMatcher", func() {
 			Ω(`{"a":[1,2,3],"b":[1,2,3],"c":[1,2,3]}`).Should(MatchOrderedJSON(`{"a":[3,2,1],"b":[1,2,3],"c":[1,2,3]}`, WithUnorderedListKeys("a")))
 		})
 	})
-
 
 	Context("SubsetMatching", func() {
 		It("should succeed if the JSON is contained", func() {
@@ -88,7 +87,7 @@ var _ = Describe("MatchUnorderedJSONMatcher", func() {
 			subject.Match(actual)
 
 			failureMessage = subject.FailureMessage(actual)
-			Ω(failureMessage).To(ContainSubstring(`first mismatched key: "b.g"."1"`))//Only report on the array, not the index
+			Ω(failureMessage).To(ContainSubstring(`first mismatched key: "b.g"."1"`)) //Only report on the array, not the index
 		})
 
 		It("reports the first found mismatch as Json does when the key is ordered", func() {
@@ -102,9 +101,9 @@ var _ = Describe("MatchUnorderedJSONMatcher", func() {
 			subject = ExpandedJsonMatcher{
 				JSONToMatch: `{"a": 1, "b.g": {"c": 2, "1": ["hello", "see ya"]}}`,
 				DeepMatcher: UnmarshalledDeepMatcher{
-					Ordered: false,
-					Subset: false,
-					InvertOrderingKeys: map[interface{}]bool{"1":true},
+					Ordered:            false,
+					Subset:             false,
+					InvertOrderingKeys: map[interface{}]bool{"1": true},
 				},
 			}
 			actual = `{"a": 1, "b.g": {"c": 2, "1": ["hello", "goodbye"]}}`

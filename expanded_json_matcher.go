@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/onsi/gomega/format"
 	"strings"
+
+	"github.com/onsi/gomega/format"
 )
 
 type ExpandedJsonMatcher struct {
@@ -111,4 +112,3 @@ func toString(a interface{}) (string, bool) {
 
 	return "", false
 }
-
